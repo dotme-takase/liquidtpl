@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Content-Style-Type" content="text/css" />
+        <meta http-equiv="Content-Script-Type" content="text/JavaScript" />
+        <meta name="keywords" content="" />
+        <meta name="description" content="" />
+        <title><liquidtpl:text key="title"/></title>
+        <link rel="stylesheet" type="text/css" href="/css/style.css" media="all" />
+        <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print" /> -->
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <script src="/js/common/jquery-1.5.2.min.js" type="text/javascript"></script>
+        <script src="/js/common/jquery.tmpl.min.js" type="text/javascript"></script>
+        <script src="/js/common/jquery.tmplPlus.min.js" type="text/javascript"></script>
+        <script src="/js/common/jquery.datalink.js" type="text/javascript"></script>
+        <script src="/js/common/jquery.json-2.2.min.js" type="text/javascript"></script>
+        <script src="/js/common/liquidtpl.js" type="text/javascript"></script>
+        <!--[if lt IE 7]>
+            <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <a id="pagetop" name="pagetop"></a>
+        <!-- wrapper ***************************************** -->
+        <div id="wrapper">
+            <!-- header ***************************************** -->
+            <div id="header">
+                <h1><a href="./"><img src="/img/common/logo.gif" alt="logo" class="logo" /></a></h1>
+                <!-- headerRightBox ***************************************** -->
+                <div class="headerRightBox">
+                    <!-- headerRightBox END -->
+                </div>
+                <!-- header END -->
+            </div>
+            <!-- mainMenu ***************************************** -->
+            <div id="mainMenu">
+                <ul id="mainMenuContainer"></ul>
+            </div>
+            <!-- content ***************************************** -->
+            <div id="content">
+                <div id="contentBlock">
+                    <div id="contentBody">
+                        <!-- breadcrumb ***********************-->
+                        <div id="breadcrumb">
+                        </div>
+                        <!-- <liquidtpl:shortcut/> -->
+                        <!-- mainBlock ***************************************** -->
+                        <div id="mainBlock">
+                            <liquidtpl:msgs/>
+                            <div id="subMenuContainer"></div>
+                            <liquidtpl:content/>
+                            <!-- mainBlock END -->
+                        </div>
+                        <!-- contentsBody END -->
+                    </div>
+                    <!-- <p class="pagetop"><a href="#pagetop">page top</a></p> -->
+                    <!-- contentsBox END -->
+                </div>
+                <!-- content END -->
+            </div>
+            <!-- footer ***************************************** -->
+            <div id="footer">
+                <!--
+                <ul>
+                    <li class="first"></li>
+                </ul>
+                -->
+                <p class="copyright">Copyright &copy; </p>
+                <!-- footer END -->
+            </div>
+            <!-- wrapper END -->
+        </div>
+        <script type="text/javascript">
+            //<![CDATA[
+            $(function(){
+                $.template( "mainMenuTemplate", '<li {{if select}}class="${select}"{{/if}}><a href="${path}">${text}<\/a><\/li>' );
+                $.template( "subMenuTemplate", '&nbsp;<a href="${path}">${text}<\/a>&nbsp;' );
+                $.ajax({
+                    type: "GET",
+                    url: "/menu?basePath=" + encodeURI(liquidtplPageInfo.basePath),
+                    dataType: "text",
+                    success: function(result){
+                        try {
+                            var _values = $.evalJsonCommentFiltered(result);
+                            $.tmpl( "mainMenuTemplate", _values.mainMenu ).appendTo("#mainMenuContainer");
+                            $.tmpl( "subMenuTemplate", _values.subMenu ).appendTo("#subMenuContainer");
+                        } catch (e) {
+                        }
+                    }
+                });
+            });
+            //]]>
+        </script>
+    </body>
+</html>
+
+
+
