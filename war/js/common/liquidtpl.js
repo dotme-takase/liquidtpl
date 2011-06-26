@@ -1,4 +1,4 @@
-/*
+/* 
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -54,7 +54,7 @@ $.escapeHTML = function(value) {
         }
         return "?";
     };
-
+    
     return String(value)
     .replace(/[<>&"']/g, replaceChars)
     .replace(/\r\n/g, "<br/>")
@@ -200,7 +200,7 @@ $.initForm = function ( formId, url, params, callback ) {
     });
 };
 
-$.setFormValues = function( formId, jsonData, beforeSubmit ){
+$.setFormValues = function( formId, jsonData, beforeSubmit, afterSuccess ){
     var values = jsonData.values;
     var keys = {};
     var sourceValues = values;
@@ -277,12 +277,12 @@ $.setFormValues = function( formId, jsonData, beforeSubmit ){
         if(beforeSubmit){
             beforeSubmit();
         }
-        $.submit(formId);
+        $.submit(formId, afterSuccess);
         return false;
     });
 };
 
-$.submit = function(formId){
+$.submit = function(formId, afterSuccess){
     $(".warningMessage").hide();
     $(".warningMessageOne").hide();
     $("#" + formId).find("input[type='submit']").attr('disabled', 'disabled');
@@ -297,6 +297,9 @@ $.submit = function(formId){
             try {
                 var jsonData = $.evalJsonCommentFiltered(result)
                 if(jsonData["result"] == "success"){
+                    if(afterSuccess){
+                        afterSuccess();
+                    }
                     if(jsonData["redirect"]){
                         location.href = jsonData["redirect"];
                     }
@@ -315,12 +318,12 @@ $.submit = function(formId){
             } catch (e) {
                 $("#" + formId).find("#grobalError").text(e.toString()).slideDown("fast");
             }
-            $("#" + formId).find("input[type='submit']").attr('disabled', null);
+            $("#" + formId).find("input[type='submit']").removeAttr('disabled');
         },
         error: function(XMLHttpRequest, textStatus, errorThrown){
             var error = "Request Error: " + errorThrown + ". " + url;
             $("#" + formId).find("#grobalError").text(error + "\n" + result).slideDown("fast");
-            $("#" + formId).find("input[type='submit']").attr('disabled', null);
+            $("#" + formId).find("input[type='submit']").removeAttr('disabled');
         }
     });
 }
