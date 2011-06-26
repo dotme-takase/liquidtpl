@@ -4,24 +4,19 @@
  */
 
 package org.dotme.liquidtpl.controller
-
+import scala.collection.JavaConversions._
+import dispatch.json.JsObject
+import dispatch.json.JsString
+import dispatch.json.JsValue
+import sjson.json.JsonSerialization._
+import sjson.json.DefaultProtocol._
 import org.dotme.liquidtpl.Constants
 import org.dotme.liquidtpl.LanguageUtil
 import org.dotme.liquidtpl.helper.BasicHelper
-import dispatch.json.JsObject
-import dispatch.json.JsString
-import java.util.logging.Logger
-import org.slim3.controller.Navigation
-import sjson.json.JsonSerialization
-import sjson.json.JsonSerialization._
-import sjson.json.DefaultProtocol._
 
-abstract class AbstractFormController extends AbstractActionController with ControllerError {
-  override val logger = Logger.getLogger(classOf[AbstractFormController].getName)
-
-  @throws(classOf[Exception])
-  override protected def run(): Navigation = {
-    request.getParameter(Constants.KEY_MODE) match {
+abstract class AbstractJsonCommitController extends AbstractJsonController with ControllerError {
+  override def getJson: JsValue = {
+    val result = request.getParameter(Constants.KEY_MODE) match {
       case Constants.MODE_SUBMIT => {
         val values = if (validate() && update()) {
           if (redirectUri.isEmpty) {
@@ -40,21 +35,13 @@ abstract class AbstractFormController extends AbstractActionController with Cont
         BasicHelper.writeJsonCommentFiltered(response, values)
         null
       }
-      case null => {
-        //render form template
-        super.run
-      }
-      case _ => {
-        val values = JsObject(List(
-          (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_FAILURE)),
-          (JsString(Constants.KEY_ERRORS), tojson(Map(Constants.KEY_GLOBAL_ERROR -> LanguageUtil.get("error.dataNotFound"))))))
-        BasicHelper.writeJsonCommentFiltered(response, values)
-        null
-      }
+      case _ => JsObject()
     }
+    result
   }
 
   def redirectUri: String = null;
   def validate(): Boolean
   def update(): Boolean
+
 }

@@ -6,16 +6,16 @@
 package org.dotme.liquidtpl.controller
 
 trait ControllerError {
-  private val errorContainer:scala.collection.mutable.Map[String, String] =
+  private val errorContainer: scala.collection.mutable.Map[String, String] =
     scala.collection.mutable.Map[String, String]();
 
-  protected def addError(key:String, value:String):Unit = {
+  protected def addError(key: String, value: String): Unit = {
     errorContainer.put(key, value)
   }
-  protected def existsError():Boolean = {
+  protected def existsError(): Boolean = {
     errorContainer.size > 0
   }
-  protected def getErrorList():Map[String, String] = {
+  protected def getErrorList(): Map[String, String] = {
     errorContainer.toMap
   }
 }
