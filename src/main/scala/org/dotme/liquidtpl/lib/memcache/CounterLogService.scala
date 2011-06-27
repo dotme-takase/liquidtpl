@@ -81,7 +81,7 @@ object CounterLogService {
     ).toList
 
     // restore count value if it can
-    val countValue:Long = if (cls.isEmpty()) {
+    val countValue:Long = if (cls == null) {
       1
     } else {
       cls.apply(0).getProperty(COUNTER_KEY).asInstanceOf[Long] + 1;

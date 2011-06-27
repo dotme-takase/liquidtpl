@@ -19,9 +19,9 @@ import org.slim3.gen.util.StringUtil;
  * @param suffix
  *            the suffix of class name
  */
-class LiquidtplFile(baseDir:File, classDesc:ClassDesc, suffix:String) {
+class LiquidtplFile(baseDir: File, classDesc: ClassDesc, suffix: String) {
 
-  val file:File = createFile(baseDir, classDesc, suffix);
+  val file: File = createFile(baseDir, classDesc, suffix);
   /**
    * Creates a new {@link LiquidtplFile}.
    *
@@ -30,9 +30,8 @@ class LiquidtplFile(baseDir:File, classDesc:ClassDesc, suffix:String) {
    * @param classDesc
    *            the class description
    */
-  def this(baseDir:File, classDesc:ClassDesc) = this(baseDir, classDesc, "");
+  def this(baseDir: File, classDesc: ClassDesc) = this(baseDir, classDesc, "");
 
-  
   /**
    * Creates a file.
    *
@@ -44,19 +43,20 @@ class LiquidtplFile(baseDir:File, classDesc:ClassDesc, suffix:String) {
    *            the suffix of class name
    * @return a file
    */
-  protected def createFile(baseDir:File, classDesc:ClassDesc, suffix:String):File = {
-    val packageDir:File =
-      if (StringUtil.isEmpty(classDesc.getPackageName())) {
+  protected def createFile(baseDir: File, classDesc: ClassDesc, suffix: String): File = {
+    val packageName: String = classDesc.getPackageName
+    val packageDir: File =
+      if (packageName == null || packageName.size == 0) {
         baseDir;
       } else {
-        new File(baseDir, classDesc.getPackageName().replace(
-            ".",
-            File.separator));
+        new File(baseDir, packageName.replace(
+          ".",
+          File.separator));
       }
     mkdirs(packageDir);
     return new File(packageDir, classDesc.getSimpleName().replace('.', '/')
-                    + suffix
-                    + ".scala");
+      + suffix
+      + ".scala");
   }
 
   /**
@@ -66,7 +66,7 @@ class LiquidtplFile(baseDir:File, classDesc:ClassDesc, suffix:String) {
    * @param dir
    *            the directory
    */
-  protected def mkdirs(dir:File):Unit = {
+  protected def mkdirs(dir: File): Unit = {
     dir.mkdirs();
   }
 
@@ -75,7 +75,7 @@ class LiquidtplFile(baseDir:File, classDesc:ClassDesc, suffix:String) {
    *
    * @return the class name
    */
-  def getClassName():String = {
+  def getClassName(): String = {
     return classDesc.getQualifiedName() + suffix;
   }
 
@@ -84,7 +84,7 @@ class LiquidtplFile(baseDir:File, classDesc:ClassDesc, suffix:String) {
    *
    * @return the file
    */
-  def getFile():File = {
+  def getFile(): File = {
     return file;
   }
 }

@@ -24,7 +24,7 @@ abstract class AbstractFormController extends AbstractActionController with Cont
     request.getParameter(Constants.KEY_MODE) match {
       case Constants.MODE_SUBMIT => {
         val values = if (validate() && update()) {
-          if (redirectUri.isEmpty) {
+          if (redirectUri == null || redirectUri.size == 0) {
             JsObject(List(
               (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS))))
           } else {

@@ -23,10 +23,10 @@ object ReverseCounterLogService {
   val CLEANUP_AT_ONCE = 100;
   val KEY_NAME = "name"
 
-  private val mcService:MemcacheService = MemcacheServiceFactory
-  .getMemcacheService();
+  private val mcService: MemcacheService = MemcacheServiceFactory
+    .getMemcacheService();
 
-  private val log:Logger = Logger.getLogger(ReverseCounterLogService.getClass.getName)
+  private val log: Logger = Logger.getLogger(ReverseCounterLogService.getClass.getName)
 
   /**
    * Increments the counter value and returns it. The values will be unique
@@ -38,25 +38,24 @@ object ReverseCounterLogService {
    *
    * @return an incremented counter value
    */
-  def increment(name:String):Long = {
+  def increment(name: String): Long = {
 
     // try to get the next value from Memcache
-    val countValue:Long =
+    val countValue: Long =
       try {
         mcService.increment(MC_KEY_COUNTER + name, -1).longValue;
       } catch {
-        case e => log.log(Level.WARNING, "Failed to increment on Memcache: ", e);
+        case e =>
+          log.log(Level.WARNING, "Failed to increment on Memcache: ", e);
           // if failed, restore the value from Log
           restoreCountValue(name);
       }
-
-
 
     // save a countValue by a ReverseCounterLog
     try {
       saveReverseCounterLog(countValue, name);
     } catch {
-      case e:DatastoreTimeoutException => log.log(Level.WARNING, "Failed to save ReverseCounterLog: ", e);
+      case e: DatastoreTimeoutException => log.log(Level.WARNING, "Failed to save ReverseCounterLog: ", e);
     }
 
     // return the value
@@ -64,24 +63,22 @@ object ReverseCounterLogService {
   }
 
   // save a count value by a ReverseCounterLog
-  private def saveReverseCounterLog(countValue:Long, name:String):Unit = {
+  private def saveReverseCounterLog(countValue: Long, name: String): Unit = {
     val datastoreService = DatastoreServiceFactory.getDatastoreService
-    val e:Entity = new Entity(COUNTER_KIND_PREFIX + name)
+    val e: Entity = new Entity(COUNTER_KIND_PREFIX + name)
     e.setProperty(COUNTER_KEY, countValue)
     datastoreService.put(e)
   }
 
   // restore the largest count value from Datastore
-  def restoreCountValue(name:String):Long = {
+  def restoreCountValue(name: String): Long = {
     val datastoreService = DatastoreServiceFactory.getDatastoreService
-    val cls:List[Entity] = datastoreService.prepare(new Query(COUNTER_KIND_PREFIX + name)
-                                                    .addSort(COUNTER_KEY, Query.SortDirection.ASCENDING)
-    ).asList(
-      FetchOptions.Builder.withLimit(1)
-    ).toList
+    val cls: List[Entity] = datastoreService.prepare(new Query(COUNTER_KIND_PREFIX + name)
+      .addSort(COUNTER_KEY, Query.SortDirection.ASCENDING)).asList(
+      FetchOptions.Builder.withLimit(1)).toList
 
     // restore count value if it can
-    val countValue:Long = if (cls.isEmpty()) {
+    val countValue: Long = if (cls == null) {
       Long.MaxValue
     } else {
       cls.apply(0).getProperty(COUNTER_KEY).asInstanceOf[Long] - 1;
@@ -99,24 +96,22 @@ object ReverseCounterLogService {
    * Deletes the count value stored on Memcache. This should be called only
    * for testing purpose.
    */
-  def deleteCountValueOnMemcache(name:String) {
+  def deleteCountValueOnMemcache(name: String) {
     mcService.delete(MC_KEY_COUNTER + name);
   }
 
-  def cleanupDatastore(name:String) {
+  def cleanupDatastore(name: String) {
     var isFirst = true;
     val datastoreService = DatastoreServiceFactory.getDatastoreService
     datastoreService.prepare(new Query(COUNTER_KIND_PREFIX + name)
-                             .addSort(COUNTER_KEY, Query.SortDirection.ASCENDING)
-    ).asList(
-      FetchOptions.Builder.withLimit(CLEANUP_AT_ONCE)
-    ).foreach {
-      e => {
-        if(!isFirst){
-          datastoreService.delete(e.getKey)
+      .addSort(COUNTER_KEY, Query.SortDirection.ASCENDING)).asList(
+      FetchOptions.Builder.withLimit(CLEANUP_AT_ONCE)).foreach { e =>
+        {
+          if (!isFirst) {
+            datastoreService.delete(e.getKey)
+          }
+          isFirst = false
         }
-        isFirst = false
       }
-    }
   }
 }
