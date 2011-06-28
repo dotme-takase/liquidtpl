@@ -78,7 +78,7 @@ object ReverseCounterLogService {
       FetchOptions.Builder.withLimit(1)).toList
 
     // restore count value if it can
-    val countValue: Long = if (cls == null) {
+    val countValue: Long = if (cls == null || cls.size == 0) {
       Long.MaxValue
     } else {
       cls.apply(0).getProperty(COUNTER_KEY).asInstanceOf[Long] - 1;
