@@ -75,7 +75,7 @@ object CounterLogService {
   def restoreCountValue(name:String):Long = {
     val datastoreService = DatastoreServiceFactory.getDatastoreService
     val cls:List[Entity] = datastoreService.prepare(new Query(COUNTER_KIND_PREFIX + name)
-                                                    .addSort(COUNTER_KEY, Query.SortDirection.ASCENDING)
+                                                    .addSort(COUNTER_KEY, Query.SortDirection.DESCENDING)
     ).asList(
       FetchOptions.Builder.withLimit(1)
     ).toList
@@ -107,7 +107,7 @@ object CounterLogService {
     var isFirst = true;
     val datastoreService = DatastoreServiceFactory.getDatastoreService
     datastoreService.prepare(new Query(COUNTER_KIND_PREFIX + name)
-                             .addSort(COUNTER_KEY, Query.SortDirection.ASCENDING)
+                             .addSort(COUNTER_KEY, Query.SortDirection.DESCENDING)
     ).asList(
       FetchOptions.Builder.withLimit(CLEANUP_AT_ONCE)
     ).foreach {
