@@ -38,7 +38,8 @@ abstract class AbstractActionController extends Controller {
       val outer = getOuterTemplate
       val content = AbstractActionController.replacer(outer, contentReplacerMap)
       val xml: NodeSeq = AbstractActionController.replacer(content, replacerMap)
-      XhtmlHelper.write(response.getWriter, xml)
+      val filteredXml = nodeFilter(xml);
+      XhtmlHelper.write(response.getWriter, filteredXml)
     } catch {
       case e: Exception =>
         response.getWriter().println(e)
@@ -102,5 +103,9 @@ abstract class AbstractActionController extends Controller {
   def getPageInfo: Map[String, String] = {
     Map[String, String](
       (Constants.KEY_BASE_PATH -> this.basePath))
+  }
+  
+  protected def nodeFilter (xml:NodeSeq):NodeSeq = {
+    xml
   }
 }
