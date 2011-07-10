@@ -82,9 +82,10 @@ object BasicHelper {
   }
 
   def jsValueOutPut(data: JsValue): String = {
-    data.toString.replaceAll("/[\r]/g", "")
-      .replaceAll("/\r\n/g", "\n")
-      .replaceAll("/[\r\n]/g", "\\n").replace("/[\t]/g", "\\t")
+    data.toString.replaceAll("\r", "")
+      .replaceAll("\r\n", "\n")
+      .replaceAll("[\r\n]", "\\\\n")
+      .replaceAll("[\t]", "\\\\t")
   }
 
   def attribute(kvs: (String, String)*) = new {
