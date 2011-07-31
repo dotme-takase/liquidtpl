@@ -16,9 +16,9 @@ import org.dotme.liquidtpl.helper.BasicHelper
 
 abstract class AbstractJsonCommitController extends AbstractJsonController with ControllerError {
   override def getJson: JsValue = {
-    val result = request.getParameter(Constants.KEY_MODE) match {
+    val result: JsValue = request.getParameter(Constants.KEY_MODE) match {
       case Constants.MODE_SUBMIT => {
-        val values = if (validate() && update()) {
+        if (validate() && update()) {
           if (redirectUri == null || redirectUri.size == 0) {
             JsObject(List(
               (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS)),
@@ -35,8 +35,6 @@ abstract class AbstractJsonCommitController extends AbstractJsonController with 
             (JsString(Constants.KEY_EXTRA_INFORMATION) -> tojson(extraInformation.toMap)),
             (JsString(Constants.KEY_ERRORS), tojson(getErrorList))))
         }
-        BasicHelper.writeJsonCommentFiltered(response, values)
-        null
       }
       case _ => JsObject()
     }
