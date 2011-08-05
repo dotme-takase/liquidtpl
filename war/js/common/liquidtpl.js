@@ -33,7 +33,7 @@ $.getUrlParams = function(url) {
     var keyValueList = url.split("&");
     for (var i = 0; i < keyValueList.length; i++) {
         var keyValue = keyValueList[i].split("=");
-        result[keyValue[0]] = keyValue[1];
+        result[keyValue[0]] = decodeURI(keyValue[1]);
     }
     return result
 }
