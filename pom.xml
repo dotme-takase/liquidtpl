@@ -4,8 +4,8 @@
     <artifactId>liquidtpl</artifactId>
     <version>1.2.1</version>
     <properties>
-        <slim3.version>1.0.11</slim3.version>
-        <appengine.version>1.5.0</appengine.version>
+        <slim3.version>1.0.12</slim3.version>
+        <appengine.version>1.5.1</appengine.version>
         <generated.src>.apt_generated</generated.src>
         <generated.war>war</generated.war>
     <!-- Scala -->
