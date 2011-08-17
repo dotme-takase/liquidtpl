@@ -20,7 +20,6 @@ abstract class AbstractJsonDataController extends AbstractJsonController with Co
         JsObject(List(
           (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS)),
           (JsString(Constants.KEY_VALUES), getList),
-          (JsString(Constants.KEY_EXTRA_INFORMATION) -> tojson(extraInformation.toMap)),
           (JsString(Constants.KEY_EMPTY_MESSAGE), tojson(LanguageUtil.get("error.dataNotFound")))))
 
       case Constants.MODE_DETAIL =>
@@ -28,7 +27,6 @@ abstract class AbstractJsonDataController extends AbstractJsonController with Co
         JsObject(List(
           (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS)),
           (JsString(Constants.KEY_VALUES), getDetail(id)),
-          (JsString(Constants.KEY_EXTRA_INFORMATION) -> tojson(extraInformation.toMap)),
           (JsString(Constants.KEY_ID) -> tojson(id))))
 
       case Constants.MODE_FORM =>
@@ -36,20 +34,11 @@ abstract class AbstractJsonDataController extends AbstractJsonController with Co
         JsObject(List(
           (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS)),
           (JsString(Constants.KEY_VALUES), getForm(id)),
-          (JsString(Constants.KEY_EXTRA_INFORMATION) -> tojson(extraInformation.toMap)),
           (JsString(Constants.KEY_ID) -> tojson(id)),
           (JsString(Constants.KEY_SUBMIT) -> tojson(LanguageUtil.get("save")))))
       case _ => JsObject()
     }
-    extraInformation.clear
     result
-  }
-
-  //KEY_EXTRA_INFORMATION
-  private val extraInformation: scala.collection.mutable.Map[String, String] = scala.collection.mutable.Map[String, String]()
-
-  def putExtraInformation(key: String, value: String): Unit = {
-    extraInformation.put(key, value)
   }
 
   def getList: JsValue

@@ -21,32 +21,21 @@ abstract class AbstractJsonCommitController extends AbstractJsonController with 
         if (validate() && update()) {
           if (redirectUri == null || redirectUri.size == 0) {
             JsObject(List(
-              (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS)),
-              (JsString(Constants.KEY_EXTRA_INFORMATION) -> tojson(extraInformation.toMap))))
+              (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS))))
           } else {
             JsObject(List(
               (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS)),
-              (JsString(Constants.KEY_EXTRA_INFORMATION) -> tojson(extraInformation.toMap)),
               (JsString(Constants.KEY_REDIRECT), tojson(redirectUri))))
           }
         } else {
           JsObject(List(
             (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_FAILURE)),
-            (JsString(Constants.KEY_EXTRA_INFORMATION) -> tojson(extraInformation.toMap)),
             (JsString(Constants.KEY_ERRORS), tojson(getErrorList))))
         }
       }
       case _ => JsObject()
     }
-    extraInformation.clear
     result
-  }
-
-  //KEY_EXTRA_INFORMATION
-  private val extraInformation: scala.collection.mutable.Map[String, String] = scala.collection.mutable.Map[String, String]()
-
-  def putExtraInformation(key: String, value: String): Unit = {
-    extraInformation.put(key, value)
   }
 
   def redirectUri: String = null;
