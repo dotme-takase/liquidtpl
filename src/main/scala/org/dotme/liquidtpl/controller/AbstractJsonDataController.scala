@@ -17,25 +17,44 @@ abstract class AbstractJsonDataController extends AbstractJsonController with Co
   override def getJson: JsValue = {
     val result = request.getParameter(Constants.KEY_MODE) match {
       case Constants.MODE_LIST =>
-        JsObject(List(
-          (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS)),
-          (JsString(Constants.KEY_VALUES), getList),
-          (JsString(Constants.KEY_EMPTY_MESSAGE), tojson(LanguageUtil.get("error.dataNotFound")))))
-
+        val values = getList match { case null => JsObject(); case json => json }
+        if (existsError) {
+          JsObject(List(
+            (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_FAILURE)),
+            (JsString(Constants.KEY_ERRORS), tojson(getErrorList))))
+        } else {
+          JsObject(List(
+            (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS)),
+            (JsString(Constants.KEY_VALUES), values),
+            (JsString(Constants.KEY_EMPTY_MESSAGE), tojson(LanguageUtil.get("error.dataNotFound")))))
+        }
       case Constants.MODE_DETAIL =>
         val id: String = request.getParameter(Constants.KEY_ID);
-        JsObject(List(
-          (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS)),
-          (JsString(Constants.KEY_VALUES), getDetail(id)),
-          (JsString(Constants.KEY_ID) -> tojson(id))))
-
+        val values = getDetail(id) match { case null => JsObject(); case json => json }
+        if (existsError) {
+          JsObject(List(
+            (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_FAILURE)),
+            (JsString(Constants.KEY_ERRORS), tojson(getErrorList))))
+        } else {
+          JsObject(List(
+            (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS)),
+            (JsString(Constants.KEY_VALUES), values),
+            (JsString(Constants.KEY_ID) -> tojson(id))))
+        }
       case Constants.MODE_FORM =>
         val id: String = request.getParameter(Constants.KEY_ID);
-        JsObject(List(
-          (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS)),
-          (JsString(Constants.KEY_VALUES), getForm(id)),
-          (JsString(Constants.KEY_ID) -> tojson(id)),
-          (JsString(Constants.KEY_SUBMIT) -> tojson(LanguageUtil.get("save")))))
+        val values = getForm(id) match { case null => JsObject(); case json => json }
+        if (existsError) {
+          JsObject(List(
+            (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_FAILURE)),
+            (JsString(Constants.KEY_ERRORS), tojson(getErrorList))))
+        } else {
+          JsObject(List(
+            (JsString(Constants.KEY_RESULT), tojson(Constants.RESULT_SUCCESS)),
+            (JsString(Constants.KEY_VALUES), values),
+            (JsString(Constants.KEY_ID) -> tojson(id)),
+            (JsString(Constants.KEY_SUBMIT) -> tojson(LanguageUtil.get("save")))))
+        }
       case _ => JsObject()
     }
     result

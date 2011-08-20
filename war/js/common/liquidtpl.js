@@ -158,7 +158,7 @@ $.initList = function(listId, itemTplId, showEmptyMsg, url, params, callback, on
             } else {
                 var error = "Request Error: " + errorThrown + ". " + url;
                 errorHtml = $("<div>").addClass("mt10").addClass("warningMessage")
-                    .text(error);
+                    .text(error).hide();
                 $("#" + listId).replaceWith(errorHtml);
                 $("#" + listId).show();
             }
@@ -234,7 +234,7 @@ $.initForm = function(formId, url, params, callback) {
         },
         error : function(XMLHttpRequest, textStatus, errorThrown) {
             var error = "Request Error: " + errorThrown + ". " + url;
-            errorHtml = $("<div>").addClass("warningMessage").text(error);
+            errorHtml = $("<div>").addClass("warningMessage").text(error).hide();
             $("#" + formId).replaceWith(errorHtml);
             $("#" + formId).show();
         }
@@ -380,7 +380,7 @@ $.submit = function(formId, afterSuccess, afterSubmit) {
         error : function(XMLHttpRequest, textStatus, errorThrown) {
             var error = "Request Error: " + errorThrown + ". " + url;
             $("#" + formId).find("#grobalError").text(
-                error + "\n" + result).slideDown("fast");
+                error + "\n" + result).hide();
             $("#" + formId).find("input[type='submit']").removeAttr(
                 'disabled');
             if (afterSubmit) {
@@ -438,7 +438,7 @@ $.initDetail = function(detailId, itemTplId, url, params, callback) {
         error : function(XMLHttpRequest, textStatus, errorThrown) {
             var error = "Request Error: " + errorThrown + ". " + url;
             errorHtml = $("<div>").addClass("mt10").addClass("warningMessage")
-                .text(error);
+                .text(error).hide();
             $("#" + detailId).replaceWith(errorHtml);
             $("#" + detailId).show();
         }
