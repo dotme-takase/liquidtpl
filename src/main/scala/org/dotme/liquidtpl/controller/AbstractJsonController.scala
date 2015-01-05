@@ -5,12 +5,12 @@
 
 package org.dotme.liquidtpl.controller
 import scala.collection.JavaConversions._
-import dispatch.json.JsValue
+import dispatch.classic.json.JsValue
 import org.slim3.controller.Controller
 import org.slim3.controller.Navigation
 import org.dotme.liquidtpl.helper.BasicHelper
-import dispatch.json.JsObject
-import dispatch.json.JsString
+import dispatch.classic.json.JsObject
+import dispatch.classic.json.JsString
 import sjson.json.JsonSerialization._
 import sjson.json.DefaultProtocol._
 import org.dotme.liquidtpl.Constants

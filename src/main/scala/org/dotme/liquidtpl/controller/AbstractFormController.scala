@@ -8,8 +8,8 @@ package org.dotme.liquidtpl.controller
 import org.dotme.liquidtpl.Constants
 import org.dotme.liquidtpl.LanguageUtil
 import org.dotme.liquidtpl.helper.BasicHelper
-import dispatch.json.JsObject
-import dispatch.json.JsString
+import dispatch.classic.json.JsObject
+import dispatch.classic.json.JsString
 import java.util.logging.Logger
 import org.slim3.controller.Navigation
 import sjson.json.JsonSerialization

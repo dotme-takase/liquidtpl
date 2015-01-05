@@ -5,10 +5,10 @@
 
 package org.dotme.liquidtpl.helper
 
-import dispatch.json.JsArray
-import dispatch.json.JsObject
-import dispatch.json.JsString
-import dispatch.json.JsValue
+import dispatch.classic.json.JsArray
+import dispatch.classic.json.JsObject
+import dispatch.classic.json.JsString
+import dispatch.classic.json.JsValue
 import javax.servlet.http.HttpServletResponse
 import org.dotme.liquidtpl.Constants
 import scala.collection.mutable.LinkedHashMap
