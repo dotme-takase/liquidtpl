@@ -45,7 +45,7 @@ object CounterLogService {
       try {
         mcService.increment(MC_KEY_COUNTER + name, 1).longValue;
       } catch {
-        case e => log.log(Level.WARNING, "Failed to increment on Memcache: ", e);
+        case e:Exception => log.log(Level.WARNING, "Failed to increment on Memcache: ", e);
           // if failed, restore the value from Log
           restoreCountValue(name);
       }
